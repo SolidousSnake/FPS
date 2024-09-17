@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77aa32e5d881472d99b6a2e8e6b06897, type: 3}
+  m_Name: M4
+  m_EditorClassIdentifier: 
+  _sfxConfig: {fileID: 11400000, guid: 5d233af8208ea254b90905c33b2a9c74, type: 2}
+  _accuracyConfig: {fileID: 11400000, guid: 56a5a6113c28f494c8dd7da78252cb60, type: 2}
+  _recoilConfig: {fileID: 11400000, guid: d0f3002d758222a468fc9ad4f577edea, type: 2}
+  _projectilePrefab: {fileID: 8161379290450095815, guid: ecd4f55b93f589a4ca05dc7e6c0f04d4, type: 3}
+  _attackType: 0
+  _reloadType: 0
+  _fireModeType: 0
+  _ammoType: 0
+  <Pellets>k__BackingField: 1
+  _cartridgesInMagazine: 30
+  _availableCartridges: 150
+  _reloadDuration: 1.8
+  _selectTime: 0.25
+  _deselectTime: 1
+  _fireDelay: 0.07
+  _damage: 10
+  _zoomInSpeed: 0.2
+  _zoomOutSpeed: 1
+  _fovZoom: 59

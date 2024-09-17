@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a2b1ae536064090bc60b891331e2aa6, type: 3}
+  m_Name: Spas12_Sfx
+  m_EditorClassIdentifier: 
+  _fireClip:
+  - {fileID: 8300000, guid: 91c4db7a59cccae4cbeaa866243671e1, type: 3}
+  - {fileID: 8300000, guid: 3f3b89979b698934b92f2ffc43307bfe, type: 3}
+  - {fileID: 8300000, guid: b7f87f1748cc85244a2772794ca564b9, type: 3}
+  _tailClip:
+  - {fileID: 8300000, guid: 92a10a70eff80034b9be23cef4d87048, type: 3}
+  - {fileID: 8300000, guid: fc716a8db19265747a8927bc8887068c, type: 3}
+  - {fileID: 8300000, guid: 9eb46cf0cd789dc40bc6d04da776f940, type: 3}
+  - {fileID: 8300000, guid: 5ada39788c6dab448a92fe97dc76c3fa, type: 3}
+  - {fileID: 8300000, guid: 0f9f78367752e79468da6d410ef9b64e, type: 3}
+  <ReloadClip>k__BackingField: {fileID: 8300000, guid: fa65f88708b6787428d72cc7be05565b, type: 3}
+  <ReloadEmptyClip>k__BackingField: {fileID: 8300000, guid: fa65f88708b6787428d72cc7be05565b, type: 3}

@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77aa32e5d881472d99b6a2e8e6b06897, type: 3}
+  m_Name: Spas12
+  m_EditorClassIdentifier: 
+  _sfxConfig: {fileID: 11400000, guid: f8678717a9f8cf34a8783e06bf4cf339, type: 2}
+  _accuracyConfig: {fileID: 11400000, guid: efc2789edb003a44389c33a261448e0c, type: 2}
+  _recoilConfig: {fileID: 11400000, guid: 1e931e80adc8b8d42b3bb54f11e2a833, type: 2}
+  _projectilePrefab: {fileID: 8161379290450095815, guid: ecd4f55b93f589a4ca05dc7e6c0f04d4, type: 3}
+  _attackType: 0
+  _reloadType: 1
+  _fireModeType: 2
+  _ammoType: 1
+  <Pellets>k__BackingField: 8
+  _cartridgesInMagazine: 8
+  _availableCartridges: 56
+  _reloadDuration: 0.4
+  _selectTime: 0.5
+  _deselectTime: 0.5
+  _fireDelay: 0.85
+  _damage: 10
+  _zoomInSpeed: 0.15
+  _zoomOutSpeed: 0.15
+  _fovZoom: 59

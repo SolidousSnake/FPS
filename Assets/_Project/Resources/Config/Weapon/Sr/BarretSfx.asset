@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a2b1ae536064090bc60b891331e2aa6, type: 3}
+  m_Name: BarretSfx
+  m_EditorClassIdentifier: 
+  _fireClip:
+  - {fileID: 8300000, guid: a3d742927cb50054ba5f3ec7e4de3708, type: 3}
+  - {fileID: 8300000, guid: 78e0a73828ed5db4ba0b23b1925dd67a, type: 3}
+  - {fileID: 8300000, guid: b8ac15a2f32b5a5409bc460b9bcc9614, type: 3}
+  - {fileID: 8300000, guid: 96aab5d378c3d1a40bedac37323d65a6, type: 3}
+  _tailClip:
+  - {fileID: 8300000, guid: 6b8051e9cb5d50e46b965dc8b20d369b, type: 3}
+  - {fileID: 8300000, guid: 6d46390bf9975fb409ac64d5472c7f35, type: 3}
+  - {fileID: 8300000, guid: 493c22cdfbf1dd543bb4f6884a696383, type: 3}
+  - {fileID: 8300000, guid: c01a0fb200f67ff49af8da4ac29790a6, type: 3}
+  - {fileID: 8300000, guid: e4f0f08fc67258d4fbd758edd516dda6, type: 3}
+  <ReloadClip>k__BackingField: {fileID: 8300000, guid: 3ed8066d6c59310479f6d2e907384c13, type: 3}
+  <ReloadEmptyClip>k__BackingField: {fileID: 8300000, guid: b1ff82b4c9013f64eb1804a7068a218c, type: 3}

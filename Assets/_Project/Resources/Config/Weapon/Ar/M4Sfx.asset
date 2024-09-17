@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0ce27d4a50f40e5ba37aebb816946b4, type: 3}
+  m_Name: M4Sfx
+  m_EditorClassIdentifier: 
+  _fireClip:
+  - {fileID: 8300000, guid: 9aab5a99de153574da67ad861852890e, type: 3}
+  - {fileID: 8300000, guid: 460989d6c97ff924a9ce05dd418dcc30, type: 3}
+  - {fileID: 8300000, guid: 79191bfa269aef14eb8fb3b7724e847e, type: 3}
+  _tailClip:
+  - {fileID: 8300000, guid: 6879253baae239147a58e6352e5cfd9f, type: 3}
+  - {fileID: 8300000, guid: f1434c04ad7769b4fbc5eceb63576617, type: 3}
+  - {fileID: 8300000, guid: 5a973303b6e8a354f8fbde44079ae124, type: 3}
+  - {fileID: 8300000, guid: bba391cd885b7de4c8d5cc4b5698411c, type: 3}
+  - {fileID: 8300000, guid: f154245f968adab4a96ce269f116978f, type: 3}
+  - {fileID: 8300000, guid: e085fa05772e8004da6a1c1357ec7de6, type: 3}
+  <ReloadClip>k__BackingField: {fileID: 8300000, guid: 444ad3041d4610d4e8815f80e343675c, type: 3}
+  <ReloadEmptyClip>k__BackingField: {fileID: 8300000, guid: e08f8f797670951418aa1fa9532a38bf, type: 3}
+  _oneShotClip: {fileID: 8300000, guid: fe755878c80c6084e92476c295622c91, type: 3}
