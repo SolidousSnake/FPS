@@ -1,7 +1,7 @@
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace _Project.Code.Runtime.Config.AI
+namespace _Project.Code.Runtime.Config.AI.Quotes
 {
     [CreateAssetMenu(menuName = "Source/Config/AI/Quotes", fileName = "New quotes config")]
     public class QuotesConfig : ScriptableObject

@@ -35,6 +35,8 @@ namespace _Project.Code.Runtime.Core.States
         }
 
         public void Update() => _updateableState?.Update();
+
+        public string GetState() => _activeState.ToString();
         
         private void ChangeState(Type stateType)
         {
@@ -46,7 +48,5 @@ namespace _Project.Code.Runtime.Core.States
 
             _updateableState = _activeState as IUpdateableState;
         }
-        
-        private T GetState<T>() where T : class, IState => _registeredStates[typeof(T)] as T;
     }
 }

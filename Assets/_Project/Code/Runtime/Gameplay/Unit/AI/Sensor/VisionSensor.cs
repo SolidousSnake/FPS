@@ -22,24 +22,23 @@ namespace _Project.Code.Runtime.Unit.AI.Sensor
 
         private Collider[] _colliders = new Collider[Constants.DefaultCollectionCapacity];
         private HashSet<GameObject> _previouslySeenObjects = new();
-        private List<GameObject> _objects = new();
+        private List<GameObject> _visibleTargets = new();
 
         private CancellationTokenSource _cts = new();
         private Mesh _mesh;
         private int _count;
 
-        public event Action TargetSighted;
-        public event Action TargetLost;
+        public event System.Action TargetSighted;
+        public event System.Action TargetLost;
         
+        public IReadOnlyList<GameObject> VisibleTargets => _visibleTargets;
+
         private void OnValidate()
         {
             _mesh = CreateWedgeMesh();
         }
 
-        private void Start()
-        {
-            Scan().Forget();
-        }
+        private void Start() => Scan().Forget();
 
         private async UniTask Scan()
         {
@@ -56,6 +55,7 @@ namespace _Project.Code.Runtime.Unit.AI.Sensor
                     if (IsInSight(obj))
                     {
                         currentlySeenObjects.Add(obj);
+                        _visibleTargets.Add(obj);
                         if (!_previouslySeenObjects.Contains(obj))
                         {
                             TargetSighted?.Invoke();
@@ -67,6 +67,7 @@ namespace _Project.Code.Runtime.Unit.AI.Sensor
                 {
                     if (!currentlySeenObjects.Contains(obj))
                     {
+                        _visibleTargets.Remove(obj);
                         TargetLost?.Invoke();
                     }
                 }
@@ -100,10 +101,7 @@ namespace _Project.Code.Runtime.Unit.AI.Sensor
             return true;
         }
 
-        private void OnDestroy()
-        {
-            _cts.Cancel();
-        }
+        private void OnDestroy() => _cts.Cancel();
 
         private void OnDrawGizmos()
         {
@@ -116,17 +114,12 @@ namespace _Project.Code.Runtime.Unit.AI.Sensor
                 Gizmos.DrawMesh(_mesh, transform.position, transform.rotation);
             }
 
-            // Gizmos.DrawWireSphere(transform.position, _distance);
-            for (int i = 0; i < _count; i++)
-            {
+            for (int i = 0; i < _count; i++) 
                 Gizmos.DrawSphere(_colliders[i].transform.position, .2f);
-            }
 
             Gizmos.color = Color.green;
-            foreach (var obj in _objects)
-            {
+            foreach (var obj in _visibleTargets) 
                 Gizmos.DrawSphere(obj.transform.position, .2f);
-            }
         }
 
         Mesh CreateWedgeMesh()

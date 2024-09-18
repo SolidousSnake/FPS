@@ -12,6 +12,7 @@ namespace _Project.Code.Runtime.Core.Utils
 
             public const string MapFile = MainFolder + "Gameplay/";
             public const string AiQuotes = MainFolder + "AI/Quotes/";
+            public const string AiStats = MainFolder + "AI/Stats/";
         }
         
         public static class Audio
@@ -27,6 +28,12 @@ namespace _Project.Code.Runtime.Core.Utils
         
         public static class Animation
         {
+            public static class IK
+            {
+                public const float Enable = 1f;
+                public const float Disable = 0f;
+            }
+            
             public static class Weapon
             {
                 public const string Walk = "Walk";

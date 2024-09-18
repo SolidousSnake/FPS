@@ -1,4 +1,5 @@
 using _Project.Code.Runtime.Config.AI;
+using _Project.Code.Runtime.Config.AI.Quotes;
 using _Project.Code.Runtime.Core.AssetManagement;
 using _Project.Code.Runtime.Core.Utils;
 using UnityEngine;
@@ -10,10 +11,10 @@ namespace _Project.Code.Runtime.Unit.Speaker
         private readonly AudioSource _speechSource;
         private readonly QuotesConfig _quotesConfig;
 
-        public EnemySpeaker(AudioSource speechSource, ConfigProvider configProvider, string name)
+        public EnemySpeaker(AudioSource speechSource, QuotesConfig quotesConfig)
         {
             _speechSource = speechSource;
-            _quotesConfig = configProvider.GetSingleImmediately<QuotesConfig>(Constants.ConfigPath.AiQuotes + name);
+            _quotesConfig = quotesConfig;
         }
 
         public void SpeakChase() => Speak(GetRandomClip(_quotesConfig.ChasingClips));

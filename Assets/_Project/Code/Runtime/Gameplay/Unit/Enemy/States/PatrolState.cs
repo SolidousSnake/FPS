@@ -1,9 +1,11 @@
 using System.Threading;
 using _Project.Code.Runtime.Core.States;
+using _Project.Code.Runtime.Core.Utils;
 using _Project.Code.Runtime.Unit.AI.Sensor;
 using _Project.Code.Runtime.Unit.Movement;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 namespace _Project.Code.Runtime.Unit.Enemy.States
 {
@@ -13,17 +15,19 @@ namespace _Project.Code.Runtime.Unit.Enemy.States
         private readonly VisionSensor _visionSensor;
         private readonly WaypointMovement _waypointMovement;
         private readonly NavMeshMovement _navMeshMovement;
+        private readonly Rig _aimLayer;
 
         private int _waypointIndex;
         private CancellationTokenSource _cts;
 
         public PatrolState(StateMachine stateMachine, VisionSensor visionSensor, WaypointMovement waypointMovement,
-            NavMeshMovement navMeshMovement)
+            NavMeshMovement navMeshMovement, Rig aimLayer)
         {
             _stateMachine = stateMachine;
             _visionSensor = visionSensor;
             _waypointMovement = waypointMovement;
             _navMeshMovement = navMeshMovement;
+            _aimLayer = aimLayer;
         }
 
         public void Enter()
@@ -34,6 +38,7 @@ namespace _Project.Code.Runtime.Unit.Enemy.States
             SetClosestWaypoint();
             MoveToNextWaypoint();
             Patrol().Forget();
+            _aimLayer.weight = Constants.Animation.IK.Disable;
         }
 
         public void Exit()

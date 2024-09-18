@@ -1921,7 +1921,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0349557721f844599331093c3c428e3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _distance: 12
+  _distance: 10.5
   _angle: 50
   _height: 1
   _scanDelay: 0.2
@@ -1931,8 +1931,8 @@ MonoBehaviour:
   _obstacleLayer:
     serializedVersion: 2
     m_Bits: 256
-  _showFov: 0
-  _meshColor: {r: 0.9528302, g: 0, b: 0, a: 1}
+  _showFov: 1
+  _meshColor: {r: 0, g: 0.8975792, b: 0.9529412, a: 0.69411767}
 --- !u!1001 &193112512
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4426,7 +4426,7 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
+  MinDistance: 12
   MaxDistance: 500
   Pan2D: 0
   rolloffMode: 0
@@ -5932,7 +5932,7 @@ MonoBehaviour:
   - {fileID: 235274233}
   _damageCalculatorType: 1
   _visionSensor: {fileID: 168461568}
-  _patrol: 1
+  _patrol: 0
   _movementMode: 1
   _waypoints:
   - {fileID: 1339087662}
@@ -5947,6 +5947,7 @@ MonoBehaviour:
   _health: {fileID: 554539679}
   _armorBar: {fileID: 1915332558}
   _armor: {fileID: 554539678}
+  _maxAttackDistanceDebug: 8.5
 --- !u!4 &554539681
 Transform:
   m_ObjectHideFlags: 0
@@ -5994,7 +5995,7 @@ NavMeshAgent:
   m_Acceleration: 2
   avoidancePriority: 50
   m_AngularSpeed: 40
-  m_StoppingDistance: 0.5
+  m_StoppingDistance: 2.5
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -6903,7 +6904,7 @@ GameObject:
   - component: {fileID: 684198821}
   - component: {fileID: 684198820}
   m_Layer: 5
-  m_Name: ====PlayerCanvas====
+  m_Name: ====Player Canvas====
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11657,7 +11658,7 @@ GameObject:
   - component: {fileID: 1222810358}
   - component: {fileID: 1222810357}
   m_Layer: 5
-  m_Name: ===BossCanvas===
+  m_Name: ===Boss Canvas===
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14983,7 +14984,7 @@ Transform:
   m_GameObject: {fileID: 1529270645}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.212, y: 1, z: -5.6}
+  m_LocalPosition: {x: -10.4, y: 1, z: -1.94}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -16393,12 +16394,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b2217e4d35c0c94ea02cf2166c17e4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  variables:
-  - {fileID: 1635683777}
-  - {fileID: 1635683776}
-  - {fileID: 1635683770}
-  - {fileID: 1635683778}
-  masterBlackboard: {fileID: 0}
 --- !u!114 &1635683761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16411,15 +16406,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b25af8627659c6949b60949c3aa8d91d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedEditorNode: {fileID: 1635683763}
-  repeatOnFinish: 1
-  maxExecutionsPerTick: 1000
-  parent: {fileID: 0}
-  rootNode: {fileID: 0}
-  executionStack: []
-  executionLog: []
-  interruptingNodes: []
-  <LastTick>k__BackingField: 0
 --- !u!114 &1635683762
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16432,7 +16418,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e5f392bbea2fa2499665ed8b604ff86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monoBehaviourTree: {fileID: 1635683761}
 --- !u!114 &1635683763
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -16445,34 +16430,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a108f537c1dc40409d8570540d4ad46e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: Stupid vision sensor
-  rect:
-    x: 285
-    y: 168
-    width: 160
-    height: 45
-  parent: {fileID: 1635683764}
-  children:
-  - {fileID: 1635683769}
-  behaviourTree: {fileID: 0}
-  runtimePriority: 0
-  breakpoint: 0
-  _selected: 0
-  stackState: []
-  interval: 1
-  randomDeviation: 0
-  callOnEnter: 1
-  nextScheduledTime: 0
-  _mask:
-    m_Bits: 128
-  _range: 10
-  _variableToSet:
-    useConstant: 0
-    mode: 1
-    blackboard: {fileID: 1635683760}
-    key: Player
-    value: {fileID: 0}
-    constantValue: {fileID: 0}
 --- !u!114 &1635683764
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -16485,19 +16442,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 538645f2f9090fd43bc6154b2e89e2d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: Root
-  rect:
-    x: 285
-    y: 105
-    width: 160
-    height: 45
-  parent: {fileID: 0}
-  children:
-  - {fileID: 1635683763}
-  behaviourTree: {fileID: 0}
-  runtimePriority: 0
-  breakpoint: 0
-  _selected: 0
 --- !u!114 &1635683765
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -16510,29 +16454,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ec611930975eda44b3c82fc2e9133a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: Move Navmesh Agent
-  rect:
-    x: 727
-    y: 416
-    width: 160
-    height: 45
-  parent: {fileID: 1635683768}
-  children: []
-  behaviourTree: {fileID: 0}
-  runtimePriority: 0
-  breakpoint: 0
-  _selected: 0
-  destination:
-    useConstant: 0
-    mode: 0
-    blackboard: {fileID: 1635683760}
-    key: waypoint
-    value: {fileID: 0}
-    constantValue: {fileID: 0}
-  agent: {fileID: 554539687}
-  stopDistance: 1
-  updateInterval: 1
-  time: 0
 --- !u!114 &1635683766
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -16545,28 +16466,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58fe7bc6a9b18e148b82820c7c1c0a90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: Wait
-  rect:
-    x: 552
-    y: 415
-    width: 160
-    height: 45
-  parent: {fileID: 1635683768}
-  children: []
-  behaviourTree: {fileID: 0}
-  runtimePriority: 0
-  breakpoint: 0
-  _selected: 0
-  time:
-    useConstant: 1
-    mode: 0
-    blackboard: {fileID: 0}
-    key: 
-    value: {fileID: 0}
-    constantValue: 1
-  randomDeviation: 0
-  continueOnRestart: 0
-  timer: 0
 --- !u!114 &1635683767
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -16579,33 +16478,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 842a054cfbe33f944b646e8de04bd575, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: Set Patrol Point
-  rect:
-    x: 375
-    y: 414
-    width: 160
-    height: 45
-  parent: {fileID: 1635683768}
-  children: []
-  behaviourTree: {fileID: 0}
-  runtimePriority: 0
-  breakpoint: 0
-  _selected: 0
-  variableToSet:
-    useConstant: 0
-    mode: 1
-    blackboard: {fileID: 1635683760}
-    key: waypoint
-    value: {fileID: 0}
-    constantValue: {fileID: 0}
-  waypoints:
-  - {fileID: 1339087661}
-  - {fileID: 519386869}
-  - {fileID: 456832360}
-  - {fileID: 1864366847}
-  - {fileID: 600141959}
-  index: 0
-  direction: 1
 --- !u!114 &1635683768
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -16618,23 +16490,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c78c7da6b00e1b46bad07949050f82f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: Sequence
-  rect:
-    x: 554
-    y: 312
-    width: 160
-    height: 45
-  parent: {fileID: 1635683769}
-  children:
-  - {fileID: 1635683767}
-  - {fileID: 1635683766}
-  - {fileID: 1635683765}
-  behaviourTree: {fileID: 0}
-  runtimePriority: 0
-  breakpoint: 0
-  _selected: 0
-  random: 0
-  index: 0
 --- !u!114 &1635683769
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -16647,22 +16502,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08540605df275034fafc8e05c6704214, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: Selector
-  rect:
-    x: 285
-    y: 231
-    width: 160
-    height: 45
-  parent: {fileID: 1635683763}
-  children:
-  - {fileID: 1635683775}
-  - {fileID: 1635683768}
-  behaviourTree: {fileID: 0}
-  runtimePriority: 0
-  breakpoint: 0
-  _selected: 0
-  random: 0
-  index: 0
 --- !u!114 &1635683770
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -16675,8 +16514,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4e5f4db414f0ab4c82c187a7653e99d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key: DistanceToPlayer
-  val: 0
 --- !u!114 &1635683771
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -16689,29 +16526,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ec611930975eda44b3c82fc2e9133a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: Move Navmesh Agent
-  rect:
-    x: 28
-    y: 564
-    width: 160
-    height: 45
-  parent: {fileID: 1635683772}
-  children: []
-  behaviourTree: {fileID: 0}
-  runtimePriority: 0
-  breakpoint: 0
-  _selected: 0
-  destination:
-    useConstant: 0
-    mode: 0
-    blackboard: {fileID: 1635683760}
-    key: Player
-    value: {fileID: 0}
-    constantValue: {fileID: 0}
-  agent: {fileID: 554539687}
-  stopDistance: 3
-  updateInterval: 0.5
-  time: 0
 --- !u!114 &1635683772
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -16724,52 +16538,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0b95a918be8d9a4f9085201010bdec1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: Number Condition
-  rect:
-    x: 27
-    y: 506
-    width: 160
-    height: 45
-  parent: {fileID: 1635683773}
-  children:
-  - {fileID: 1635683771}
-  behaviourTree: {fileID: 0}
-  runtimePriority: 0
-  breakpoint: 0
-  _selected: 0
-  stackState: []
-  lastConditionCheckResult: 0
-  abort: 0
-  type: 0
-  floatReference:
-    useConstant: 0
-    mode: 1
-    blackboard: {fileID: 1635683760}
-    key: DistanceToPlayer
-    value: {fileID: 0}
-    constantValue: 0
-  intReference:
-    useConstant: 0
-    mode: 1
-    blackboard: {fileID: 0}
-    key: 
-    value: {fileID: 0}
-    constantValue: 0
-  comparator: 1
-  floatReference2:
-    useConstant: 1
-    mode: 0
-    blackboard: {fileID: 1635683760}
-    key: DistanceToPlayer
-    value: {fileID: 0}
-    constantValue: 2
-  intReference2:
-    useConstant: 1
-    mode: 0
-    blackboard: {fileID: 0}
-    key: 
-    value: {fileID: 0}
-    constantValue: 0
 --- !u!114 &1635683773
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -16782,45 +16550,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc2659d9740e09744b583d40f78bde8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: Calculate Distance Service
-  rect:
-    x: 29
-    y: 445
-    width: 160
-    height: 45
-  parent: {fileID: 1635683774}
-  children:
-  - {fileID: 1635683772}
-  behaviourTree: {fileID: 0}
-  runtimePriority: 0
-  breakpoint: 0
-  _selected: 0
-  stackState: []
-  interval: 1
-  randomDeviation: 0
-  callOnEnter: 1
-  nextScheduledTime: 0
-  transform1:
-    useConstant: 0
-    mode: 0
-    blackboard: {fileID: 1635683760}
-    key: selfTransform
-    value: {fileID: 0}
-    constantValue: {fileID: 0}
-  transform2:
-    useConstant: 0
-    mode: 0
-    blackboard: {fileID: 1635683760}
-    key: Player
-    value: {fileID: 0}
-    constantValue: {fileID: 0}
-  variable:
-    useConstant: 0
-    mode: 1
-    blackboard: {fileID: 1635683760}
-    key: DistanceToPlayer
-    value: {fileID: 0}
-    constantValue: 0
 --- !u!114 &1635683774
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -16833,24 +16562,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 056841afaed742d4e909e76361b5173f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: Repeater
-  rect:
-    x: 33
-    y: 388
-    width: 160
-    height: 45
-  parent: {fileID: 1635683775}
-  children:
-  - {fileID: 1635683773}
-  behaviourTree: {fileID: 0}
-  runtimePriority: 0
-  breakpoint: 0
-  _selected: 0
-  stackState: []
-  loops: 1
-  infinite: 1
-  breakOnFailure: 0
-  count: 0
 --- !u!114 &1635683775
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -16863,45 +16574,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 534e3ec7de6cd444e984c2e7f68e42e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: Is Set Condition
-  rect:
-    x: 31
-    y: 320
-    width: 160
-    height: 45
-  parent: {fileID: 1635683769}
-  children:
-  - {fileID: 1635683774}
-  behaviourTree: {fileID: 0}
-  runtimePriority: 0
-  breakpoint: 0
-  _selected: 0
-  stackState: []
-  lastConditionCheckResult: 0
-  abort: 3
-  invert: 0
-  type: 2
-  boolReference:
-    useConstant: 0
-    mode: 1
-    blackboard: {fileID: 0}
-    key: 
-    value: {fileID: 0}
-    constantValue: 0
-  objectReference:
-    useConstant: 0
-    mode: 1
-    blackboard: {fileID: 0}
-    key: 
-    value: {fileID: 0}
-    constantValue: {fileID: 0}
-  transformReference:
-    useConstant: 0
-    mode: 1
-    blackboard: {fileID: 1635683760}
-    key: Player
-    value: {fileID: 0}
-    constantValue: {fileID: 0}
 --- !u!114 &1635683776
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -16914,8 +16586,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbc98ff6538275b4c9a8383882546ee9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key: waypoint
-  val: {fileID: 0}
 --- !u!114 &1635683777
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -16928,8 +16598,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbc98ff6538275b4c9a8383882546ee9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key: Player
-  val: {fileID: 0}
 --- !u!114 &1635683778
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -16942,8 +16610,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbc98ff6538275b4c9a8383882546ee9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key: selfTransform
-  val: {fileID: 554539681}
 --- !u!1 &1638233088
 GameObject:
   m_ObjectHideFlags: 0
