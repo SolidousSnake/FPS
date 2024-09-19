@@ -35,8 +35,6 @@ namespace _Project.Code.Runtime.Core.States
         }
 
         public void Update() => _updateableState?.Update();
-
-        public string GetState() => _activeState.ToString();
         
         private void ChangeState(Type stateType)
         {

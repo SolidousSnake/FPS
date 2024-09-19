@@ -13,6 +13,7 @@ using _Project.Code.Runtime.Unit.AI.Waypoint;
 using _Project.Code.Runtime.Unit.Enemy.States;
 using _Project.Code.Runtime.Unit.Movement;
 using _Project.Code.Runtime.Unit.Speaker;
+using _Project.Code.Runtime.Weapon;
 using _Project.Code.Runtime.Weapon.Visitor;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -27,6 +28,7 @@ namespace _Project.Code.Runtime.Unit.Enemy.Install
         [SerializeField] private UnitHitBox[] _hitBoxes;
         [SerializeField] private DamageCalculatorType _damageCalculatorType;
         [SerializeField] private VisionSensor _visionSensor;
+        [SerializeField] private WeaponFacade _weaponFacade;
 
         [Title("Behaviour")] [SerializeField] private bool _patrol;
 
@@ -70,11 +72,6 @@ namespace _Project.Code.Runtime.Unit.Enemy.Install
             Initialize();
         }
 
-        private void Update()
-        {
-            Debug.Log(_enemyFsm.GetState());
-        }
-
         public virtual void Initialize()
         {
             _enemyFsm = new StateMachine();
@@ -91,7 +88,12 @@ namespace _Project.Code.Runtime.Unit.Enemy.Install
                 hitBox.Initialize(_calculator);
 
             _healthBar.Initialize(_health);
+            _health.Depleted += EnterDeathState;
         }
+
+        private void EnterDeathState() => _enemyFsm.Enter<DeathState>();
+
+        private void OnDestroy() => _health.Depleted -= EnterDeathState;
 
         protected virtual void InstallStates()
         {
@@ -105,7 +107,7 @@ namespace _Project.Code.Runtime.Unit.Enemy.Install
             _enemyFsm.RegisterState(new ChaseTargetState(_enemyFsm, _enemySpeaker, _visionSensor, findTargetAction, _aiStatsConfig, navMeshMovement));
             _enemyFsm.RegisterState(new SearchState(_enemyFsm, _visionSensor, _enemySpeaker));
             _enemyFsm.RegisterState(new AttackState(_enemyFsm, _visionSensor, _enemySpeaker, findTargetAction, _aiStatsConfig, _aimLayer));
-            _enemyFsm.RegisterState(new DeathState(_enemySpeaker));
+            _enemyFsm.RegisterState(new DeathState(_battleFsm, _enemySpeaker, this));
 
             if (_patrol)
             {

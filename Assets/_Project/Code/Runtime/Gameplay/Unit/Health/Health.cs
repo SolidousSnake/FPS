@@ -13,8 +13,9 @@ namespace _Project.Code.Runtime.Unit.Health
 
         public float MaxHealth => _maxHealth;
         public IReadOnlyReactiveProperty<float> CurrentHealth => _currentHealth;
-        public IObservable<UniRx.Unit> Depleted => _currentHealth.Where(current => current <= 0).AsUnitObservable();
 
+        public event Action Depleted;
+        
         private bool IsValidHealth(float health) => health > 0;
         private void Start() => _currentHealth.Value = _maxHealth;
 
@@ -26,7 +27,10 @@ namespace _Project.Code.Runtime.Unit.Health
             _currentHealth.Value -= damage;
 
             if (_currentHealth.Value <= 0)
+            {
                 _currentHealth.Value = 0;
+                Depleted?.Invoke();
+            }
         }
 
         public void ApplyHeal(float health)

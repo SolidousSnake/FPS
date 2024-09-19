@@ -1,38 +1,22 @@
 using System.Linq;
-using _Project.Code.Runtime.Services.Input;
 using _Project.Code.Runtime.UI.View;
 using _Project.Code.Runtime.UI.View.Crosshair;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using Zenject;
 
-namespace _Project.Code.Runtime.Weapon
+namespace _Project.Code.Runtime.Weapon.Holder
 {
     public class WeaponHolder : MonoBehaviour
     {
         [SerializeField] private WeaponFacade[] _weapons;
 
-        private InputService _inputService;
         private int _selectedWeaponIndex;
         
-        [Inject]
-        private void Construct(InputService inputService, WeaponAmmoView weaponAmmoView, CrosshairView crosshairView)
+        public void Initialize(WeaponAmmoView weaponAmmoView, CrosshairView crosshairView)
         {
-            _inputService = inputService;
-            
-            _inputService.Fire1Pressed += Attack;
-            _inputService.Fire1Released += StopAttack;
-            _inputService.Fire2Pressed += Aim;
-            _inputService.Fire2Released += Aim;
-
-            _inputService.ReloadButtonPressed += Reload;
-            _inputService.WeaponSelectPressed += SelectWeaponByIndex;
-            
             InitializeWeapons(weaponAmmoView, crosshairView);
             SelectWeaponByIndex(1);
             
-            Cursor.lockState = CursorLockMode.Locked;
-            Debug.Log("Cursor in weapon holder");
         }
         
         private void InitializeWeapons(WeaponAmmoView weaponAmmoView, CrosshairView crosshairView)
@@ -41,12 +25,12 @@ namespace _Project.Code.Runtime.Weapon
                 weapon.Initialize(weaponAmmoView, crosshairView);
         }
 
-        private void Attack() => _weapons[_selectedWeaponIndex].Shoot();
-        private void StopAttack() => _weapons[_selectedWeaponIndex].StopShoot();
-        private void Reload() => _weapons[_selectedWeaponIndex].Reload();
-        private void Aim() => _weapons[_selectedWeaponIndex].Aim();
+        public void Attack() => _weapons[_selectedWeaponIndex].Shoot();
+        public void StopAttack() => _weapons[_selectedWeaponIndex].StopShoot();
+        public void Reload() => _weapons[_selectedWeaponIndex].Reload();
+        public void Aim() => _weapons[_selectedWeaponIndex].Aim();
 
-        private void SelectWeaponByIndex(int index)
+        public void SelectWeaponByIndex(int index)
         {
             int adjustedIndex = index - 1;
 
