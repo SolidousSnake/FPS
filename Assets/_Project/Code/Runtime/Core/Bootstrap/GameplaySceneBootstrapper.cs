@@ -19,7 +19,7 @@ namespace _Project.Code.Runtime.Core.Bootstrap
         
         public void Initialize()
         {
-            _configProvider.LoadSingle<GameplaySceneConfig>(Constants.ConfigPath.MapFile + "Afgan");
+            _configProvider.LoadSingle<GameplaySceneConfig>(AssetPath.ConfigPath.MapFile + "Afgan");
             Debug.Log("Remove string literal");
             
             RegisterStates();

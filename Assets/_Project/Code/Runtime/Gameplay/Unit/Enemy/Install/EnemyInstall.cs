@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using _Project.Code.Runtime.Config.AI.Quotes;
 using _Project.Code.Runtime.Config.AI.Stats;
 using _Project.Code.Runtime.Core.AssetManagement;
+using _Project.Code.Runtime.Core.Factory;
 using _Project.Code.Runtime.Core.States;
 using _Project.Code.Runtime.Core.Utils;
 using _Project.Code.Runtime.DamageCalculator;
 using _Project.Code.Runtime.UI.Bar;
+using _Project.Code.Runtime.UI.Parent;
 using _Project.Code.Runtime.Unit.AI.Action;
 using _Project.Code.Runtime.Unit.AI.Sensor;
 using _Project.Code.Runtime.Unit.AI.Waypoint;
@@ -47,12 +49,7 @@ namespace _Project.Code.Runtime.Unit.Enemy.Install
         [TabGroup("Component")] [SerializeField]
         private Rig _aimLayer;
 
-        [TabGroup("Common")] [SerializeField] private EnemyHealthBar _healthBar;
         [TabGroup("Common")] [SerializeField] private Health.Health _health;
-
-        [TabGroup("Common")] [ShowIf(nameof(ShouldHaveArmor))] [SerializeField]
-        private EnemyArmorBar _armorBar;
-
         [TabGroup("Common")] [ShowIf(nameof(ShouldHaveArmor))] [SerializeField]
         private Armor.Armor _armor;
 
@@ -60,7 +57,9 @@ namespace _Project.Code.Runtime.Unit.Enemy.Install
         
         [Inject] private BattleStateMachine _battleFsm;
         [Inject] private ConfigProvider _configProvider;
-
+        [Inject] private UIFactory _uiFactory;
+        [Inject] private BossBarParent _bossBarParent;        
+        
         private IDamageCalculator _calculator;
         private StateMachine _enemyFsm;
         private EnemySpeaker _enemySpeaker;
@@ -76,24 +75,34 @@ namespace _Project.Code.Runtime.Unit.Enemy.Install
         {
             _enemyFsm = new StateMachine();
             _enemySpeaker = new EnemySpeaker(_speechSource
-                , _configProvider.GetSingleImmediately<QuotesConfig>(Constants.ConfigPath.AiQuotes + gameObject.name));
+                , _configProvider.GetSingleImmediately<QuotesConfig>(AssetPath.ConfigPath.AiQuotes + gameObject.name));
 
             InstallStates();
             InstallDamageCalculator();
-
-            if (ShouldHaveArmor())
-                _armorBar.Initialize(_armor);
+            InitializeUI();
 
             foreach (var hitBox in _hitBoxes)
                 hitBox.Initialize(_calculator);
 
-            _healthBar.Initialize(_health);
             _health.Depleted += EnterDeathState;
         }
 
+        private void OnDestroy() => _health.Depleted -= EnterDeathState;
+
         private void EnterDeathState() => _enemyFsm.Enter<DeathState>();
 
-        private void OnDestroy() => _health.Depleted -= EnterDeathState;
+        private void InitializeUI()
+        {
+            var bossNameLabel = _uiFactory.CreateBossNameLabel(_bossBarParent.transform);
+            var healthBar = _uiFactory.CreateHealthBar(bossNameLabel.transform);
+            var armorBar = _uiFactory.CreateArmorBar(bossNameLabel.transform);
+            
+            bossNameLabel.Initialize("SED");
+            healthBar.Initialize(_health);
+
+            if (ShouldHaveArmor())
+                armorBar.Initialize(_armor);
+        }
 
         protected virtual void InstallStates()
         {
@@ -102,12 +111,12 @@ namespace _Project.Code.Runtime.Unit.Enemy.Install
             var findTargetAction = new FindClosestTargetAction(_visionSensor);
             
             _aiStatsConfig =
-                _configProvider.GetSingleImmediately<AiStatsConfig>(Constants.ConfigPath.AiStats + gameObject.name);
+                _configProvider.GetSingleImmediately<AiStatsConfig>(AssetPath.ConfigPath.AiStats + gameObject.name);
 
             _enemyFsm.RegisterState(new ChaseTargetState(_enemyFsm, _enemySpeaker, _visionSensor, findTargetAction, _aiStatsConfig, navMeshMovement));
             _enemyFsm.RegisterState(new SearchState(_enemyFsm, _visionSensor, _enemySpeaker));
             _enemyFsm.RegisterState(new AttackState(_enemyFsm, _visionSensor, _enemySpeaker, findTargetAction, _aiStatsConfig, _aimLayer));
-            _enemyFsm.RegisterState(new DeathState(_battleFsm, _enemySpeaker, this));
+            _enemyFsm.RegisterState(new DeathState(_battleFsm, _enemySpeaker, _aimLayer, this));
 
             if (_patrol)
             {
