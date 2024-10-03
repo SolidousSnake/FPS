@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f3e9c3d86494e94951d710ae5633a82, type: 3}
   m_Name: AfganMusicConfig
   m_EditorClassIdentifier: 
-  <IdleLoopClip>k__BackingField: {fileID: 8300000, guid: 5bc5ed7e67196d44e9d0d7d747473daf, type: 3}
-  <AlertIntroClip>k__BackingField: {fileID: 8300000, guid: c4dfbe48314be9a4494e27cfc060f4b7, type: 3}
-  <AlertLoopClip>k__BackingField: {fileID: 8300000, guid: 8ad209e6c8e983842a667bd0d7659a46, type: 3}
+  <StealthLoopClip>k__BackingField: {fileID: 8300000, guid: 5bc5ed7e67196d44e9d0d7d747473daf, type: 3}
+  <EvasionLoopClip>k__BackingField: {fileID: 8300000, guid: feae755338e16d24c97961f31c79e7e6, type: 3}
+  <AlertIntroClip>k__BackingField: {fileID: 0}
+  <AlertLoopClip>k__BackingField: {fileID: 8300000, guid: a1048fca07b03d84082d5ed2aecb0f70, type: 3}

@@ -14,8 +14,6 @@ namespace _Project.Code.Runtime.Core.Factory
         public BossNameLabel CreateBossNameLabel(Transform parent)
         {
             var prefab = _assetProvider.Load<BossNameLabel>(AssetPath.UIPath.BossLabel);
-            Debug.Log(prefab);
-            Debug.Log(parent);
             var instance = Object.Instantiate(prefab, parent);
             return instance;
         }

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace _Project.Code.Runtime.Unit.Movement
 {
-    public sealed class PhysicsMovement
+    public class PhysicsMovement
     {
         private readonly Rigidbody _rigidBody;
         private readonly Transform _body;

@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af221fa4931a46b6a7663f0a87806f41, type: 3}
   m_Name: Sed
   m_EditorClassIdentifier: 
-  <MaxAttackDistance>k__BackingField: 8.5
+  <MaxAttackDistance>k__BackingField: 6
   <UpdateStateDelay>k__BackingField: 0.09

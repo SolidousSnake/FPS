@@ -9,6 +9,8 @@ namespace _Project.Code.Runtime.Core.Utils
             public const string MapFile = MainFolder + "Gameplay/";
             public const string AiQuotes = MainFolder + "AI/Quotes/";
             public const string AiStats = MainFolder + "AI/Stats/";
+            public const string AttackConfig = MainFolder + "AI/Goap/AttackConfig/";
+            public const string WanderConfig = MainFolder + "AI/Goap/WanderConfig/";
         }
 
         public static class UIPath

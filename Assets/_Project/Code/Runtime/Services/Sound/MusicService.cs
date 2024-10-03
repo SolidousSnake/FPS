@@ -1,51 +1,40 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
 namespace _Project.Code.Runtime.Services.Sound
 {
-    public class MusicService : ITickable, IDisposable
+    public class MusicService : IDisposable
     {
         [Inject] private readonly AudioSource _musicSource;
-
-        private readonly Queue<AudioClip> _clipQueue = new(3);
-
-        public void Tick()
-        {
-            if (!_musicSource.isPlaying && _clipQueue.Count > 0) 
-                PlayNextClip();
-        }
+        
+        private float _syncTime;
 
         public void PlayImmediately(AudioClip clip)
         {
-            Stop();
-            Enqueue(clip);
-        }
-
-        public void Enqueue(AudioClip clip)
-        {
-            _musicSource.loop = false;
-            _clipQueue.Enqueue(clip);
-            PlayNextClip();
-        }
-
-        private void PlayNextClip()
-        {
-            if (_clipQueue.Count == 0 || _musicSource.isPlaying)
+            if (_musicSource.isPlaying)
                 return;
 
-            var clip = _clipQueue.Dequeue();
             _musicSource.clip = clip;
-            _musicSource.loop = _clipQueue.Count == 0;
-
             _musicSource.Play();
+            
+            if (_syncTime > 0 && _syncTime < _musicSource.clip.length)
+                _musicSource.time = _syncTime;
+            else
+                _syncTime = 0f;
         }
 
         public void Stop()
         {
+            _syncTime = _musicSource.time;
             _musicSource.Stop();
             _musicSource.clip = null;
+        }
+
+        public void StopAndReset()
+        {
+            Stop();
+            _syncTime = 0;
         }
 
         public void Resume() => _musicSource.UnPause();

@@ -2,6 +2,7 @@ using _Project.Code.Runtime.Core.AssetManagement;
 using _Project.Code.Runtime.Config.Gameplay;
 using _Project.Code.Runtime.Config.Level;
 using _Project.Code.Runtime.Core.States;
+using _Project.Code.Runtime.Services.Collection;
 using _Project.Code.Runtime.Services.Sound;
 
 namespace _Project.Code.Runtime.States
@@ -9,22 +10,30 @@ namespace _Project.Code.Runtime.States
     public class StealthState : IState
     {
         private readonly MusicConfig _musicConfig;
+        private readonly BattleStateMachine _fsm;
         private readonly MusicService _musicService;
+        private readonly EnemyCollection _enemyCollection;
 
-        public StealthState(MusicService musicService, ConfigProvider configProvider)
+        public StealthState(BattleStateMachine fsm, MusicService musicService, ConfigProvider configProvider, EnemyCollection enemyCollection)
         {
+            _fsm = fsm;
             _musicService = musicService;
-            _musicConfig = configProvider.GetSingle<GameplaySceneConfig>().Music;
+            _enemyCollection = enemyCollection;
+            _musicConfig = configProvider.GetSingle<LevelConfig>().Music;
         }
 
         public void Enter()
         {
-            _musicService.PlayImmediately(_musicConfig.IdleLoopClip);
+            _enemyCollection.PlayerSighted += _fsm.Enter<AlertState>;
+            
+            _enemyCollection.SetIdle();
+            _musicService.PlayImmediately(_musicConfig.StealthLoopClip);
         }
 
         public void Exit()
         {
-            _musicService.Stop();
+            _enemyCollection.PlayerSighted -= _fsm.Enter<AlertState>;
+            _musicService.StopAndReset();
         }
     }
 }

@@ -1,9 +1,10 @@
 using _Project.Code.Runtime.Config.Player;
 using _Project.Code.Runtime.Core.States;
 using _Project.Code.Runtime.Services.Input;
+using _Project.Code.Runtime.States;
 using _Project.Code.Runtime.UI.View;
 using _Project.Code.Runtime.UI.View.Crosshair;
-using _Project.Code.Runtime.Unit.Handlers;
+using _Project.Code.Runtime.Unit.Rotator;
 using _Project.Code.Runtime.Unit.Movement;
 using _Project.Code.Runtime.Unit.Player.States;
 using _Project.Code.Runtime.Weapon.Holder;
@@ -29,7 +30,7 @@ namespace _Project.Code.Runtime.Unit.Player
 
         private InputService _inputService;
         private PhysicsMovement _movement;
-        private CameraHandler _cameraHandler;
+        private CameraRotator _cameraRotator;
         private StateMachine _stateMachine;
         private PlayerWeaponHolderProvider _weaponHolderProvider;
 
@@ -39,7 +40,7 @@ namespace _Project.Code.Runtime.Unit.Player
             _inputService = inputService;
 
             _movement = new PhysicsMovement(_rigidBody, _body);
-            _cameraHandler = new CameraHandler(_head, _settings.MouseSettings, _body);
+            _cameraRotator = new CameraRotator(_head, _settings.MouseSettings, _body);
             _weaponHolderProvider = new PlayerWeaponHolderProvider(inputService, weaponAmmoView, crosshairView, _weaponHolder);
 
             RegisterStates();
@@ -63,13 +64,13 @@ namespace _Project.Code.Runtime.Unit.Player
         private void Subscribe()
         {
             _inputService.MovementButtonPressed += _movement.Move;
-            _inputService.MouseDeltaChanged += _cameraHandler.SetRotation;
+            _inputService.MouseDeltaChanged += _cameraRotator.SetRotation;
         }
 
         private void OnDestroy()
         {
             _inputService.MovementButtonPressed -= _movement.Move;
-            _inputService.MouseDeltaChanged -= _cameraHandler.SetRotation;
+            _inputService.MouseDeltaChanged -= _cameraRotator.SetRotation;
         }
     }
 }

@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using _Project.Code.Runtime.Unit.AI.Waypoint;
+using _Project.Code.Runtime.Point.Waypoint;
 using UnityEngine;
 
 namespace _Project.Code.Runtime.Unit.Movement
@@ -22,7 +22,7 @@ namespace _Project.Code.Runtime.Unit.Movement
 
         public float GetWaitingTime() => _waypoints[_currentWaypointIndex].WaitingTime;
         public Transform GetCurrentWaypoint() => _waypoints[_currentWaypointIndex].transform;
-        
+
         public void SetCurrentWaypoint(Transform waypoint)
         {
             for (int i = 0; i < _waypoints.Count; i++)

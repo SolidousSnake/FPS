@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace _Project.Code.Runtime.Core.States
 {
@@ -8,14 +9,23 @@ namespace _Project.Code.Runtime.Core.States
         private readonly Dictionary<Type, IState> _registeredStates;
         private IState _activeState;
         private IState _previousState;
+        private IDefaultState _defaultState;
         private IUpdateableState _updateableState;
         
         public StateMachine()
         {
             _registeredStates = new Dictionary<Type, IState>();
         }
+
+        public IState ActiveState => _activeState;
         
-        public void RegisterState(IState state) => _registeredStates.Add(state.GetType(), state);
+        public void RegisterState(IState state)
+        {
+            if (state is IDefaultState defaultState) 
+                _defaultState = defaultState;
+
+            _registeredStates.Add(state.GetType(), state);
+        }
 
         public void Enter<T>() where T : class, IState
         {
@@ -34,6 +44,14 @@ namespace _Project.Code.Runtime.Core.States
             ChangeState(_previousState.GetType());
         }
 
+        public void EnterDefaultState()
+        {
+            if (_defaultState == null)
+                return;
+
+            ChangeState(_defaultState.GetType());
+        }
+
         public void Update() => _updateableState?.Update();
         
         private void ChangeState(Type stateType)
@@ -43,7 +61,6 @@ namespace _Project.Code.Runtime.Core.States
             IState newState = _registeredStates[stateType];
             _activeState = newState;
             _activeState.Enter();
-
             _updateableState = _activeState as IUpdateableState;
         }
     }
