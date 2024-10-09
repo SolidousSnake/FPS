@@ -1,9 +1,11 @@
+using System;
 using _Project.Code.Runtime.Core.AssetManagement;
 using _Project.Code.Runtime.Config.Gameplay;
 using _Project.Code.Runtime.Config.Level;
 using _Project.Code.Runtime.Core.States;
 using _Project.Code.Runtime.Services.Collection;
 using _Project.Code.Runtime.Services.Sound;
+using UniRx;
 
 namespace _Project.Code.Runtime.States
 {
@@ -14,7 +16,12 @@ namespace _Project.Code.Runtime.States
         private readonly MusicService _musicService;
         private readonly EnemyCollection _enemyCollection;
 
-        public StealthState(BattleStateMachine fsm, MusicService musicService, ConfigProvider configProvider, EnemyCollection enemyCollection)
+        private IDisposable _playerSighted;
+
+        public StealthState(BattleStateMachine fsm
+            , MusicService musicService
+            , ConfigProvider configProvider
+            , EnemyCollection enemyCollection)
         {
             _fsm = fsm;
             _musicService = musicService;
@@ -24,15 +31,18 @@ namespace _Project.Code.Runtime.States
 
         public void Enter()
         {
-            _enemyCollection.PlayerSighted += _fsm.Enter<AlertState>;
-            
+            _playerSighted = _enemyCollection.PlayerSighted.Subscribe(sighted =>
+            {
+                if (sighted) _fsm.Enter<AlertState>();
+            });
+
             _enemyCollection.SetIdle();
             _musicService.PlayImmediately(_musicConfig.StealthLoopClip);
         }
 
         public void Exit()
         {
-            _enemyCollection.PlayerSighted -= _fsm.Enter<AlertState>;
+            _playerSighted.Dispose();
             _musicService.StopAndReset();
         }
     }

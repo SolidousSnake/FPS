@@ -8,6 +8,7 @@ using _Project.Code.Runtime.Unit.Rotator;
 using _Project.Code.Runtime.Unit.Movement;
 using _Project.Code.Runtime.Unit.Player.States;
 using _Project.Code.Runtime.Weapon.Holder;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using Zenject;
 
@@ -15,7 +16,7 @@ namespace _Project.Code.Runtime.Unit.Player
 {
     public sealed class PlayerFacade : MonoBehaviour
     {
-        [Header("Components")] [SerializeField]
+        [Title("Components")] [SerializeField]
         private Rigidbody _rigidBody;
 
         [SerializeField] private PlayerSettings _settings;
@@ -24,7 +25,7 @@ namespace _Project.Code.Runtime.Unit.Player
         [SerializeField] private CapsuleCollider _collider;
         [SerializeField] private WeaponHolder _weaponHolder;
 
-        [Header("States")] [SerializeField] private PlayerStateConfig _standState;
+        [Title("States")] [SerializeField] private PlayerStateConfig _standState;
         [SerializeField] private PlayerStateConfig _crouchState;
         [SerializeField] private PlayerStateConfig _proneState;
 

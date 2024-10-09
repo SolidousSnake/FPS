@@ -3,32 +3,23 @@ using UnityEngine.Animations.Rigging;
 using _Project.Code.Runtime.Core.Utils;
 using _Project.Code.Runtime.Core.States;
 using _Project.Code.Runtime.Unit.Movement;
-using _Project.Code.Runtime.Unit.AI.Sensor;
 using Cysharp.Threading.Tasks;
-using UnityEngine;
 
 namespace _Project.Code.Runtime.AI.States
 {
     public class PatrolState : IDefaultState
     {
-        private readonly StateMachine _stateMachine;
-        private readonly VisionSensor _visionSensor;
         private readonly Rig _aimLayer;
-        
         private readonly WaypointMovement _waypointMovement;
         private readonly NavMeshMovement _navMeshMovement;
 
         private CancellationTokenSource _cts;
         private int _waypointIndex;
-
-        public PatrolState(StateMachine stateMachine
-            , VisionSensor visionSensor
-            , Rig aimLayer
+        
+        public PatrolState(Rig aimLayer
             , WaypointMovement waypointMovement
             , NavMeshMovement navMeshMovement)
         {
-            _stateMachine = stateMachine;
-            _visionSensor = visionSensor;
             _aimLayer = aimLayer;
             _waypointMovement = waypointMovement;
             _navMeshMovement = navMeshMovement;
@@ -36,7 +27,6 @@ namespace _Project.Code.Runtime.AI.States
 
         public void Enter()
         {
-            _visionSensor.TargetSighted += _stateMachine.Enter<ChaseTargetState>;
             _aimLayer.weight = Constants.Animation.IK.Disable;
             _cts = new CancellationTokenSource();
 
@@ -47,7 +37,6 @@ namespace _Project.Code.Runtime.AI.States
 
         public void Exit()
         {
-            _visionSensor.TargetSighted -= _stateMachine.Enter<ChaseTargetState>;
             _cts.Cancel();
             _navMeshMovement.Stop();
         }

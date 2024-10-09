@@ -6,6 +6,7 @@ using _Project.Code.Runtime.Core.States;
 using _Project.Code.Runtime.Core.Utils;
 using _Project.Code.Runtime.Point.SpawnPoint;
 using _Project.Code.Runtime.States;
+using _Project.Code.Runtime.UI.Label;
 using Zenject;
 
 namespace _Project.Code.Runtime.Core.Bootstrap
@@ -16,6 +17,8 @@ namespace _Project.Code.Runtime.Core.Bootstrap
         [Inject] private readonly StateFactory _stateFactory;
         [Inject] private readonly ConfigProvider _configProvider;
 
+        [Inject] private readonly TimeLabel _timeLabel;
+        
         [Inject] private readonly IEnumerable<EnemySpawnPoint> _spawnPoints;
         
         public void Initialize()
@@ -24,6 +27,8 @@ namespace _Project.Code.Runtime.Core.Bootstrap
             RegisterStates();
             SetBattleState();
 
+            _timeLabel.Initialize();
+            
             foreach (var spawnPoint in _spawnPoints) 
                 spawnPoint.Spawn();
         }

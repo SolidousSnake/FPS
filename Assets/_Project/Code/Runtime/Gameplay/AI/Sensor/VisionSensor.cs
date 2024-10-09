@@ -5,13 +5,14 @@ using System.Threading;
 using _Project.Code.Runtime.Core.Utils;
 using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
+using UniRx;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-namespace _Project.Code.Runtime.Unit.AI.Sensor
+namespace _Project.Code.Runtime.AI.Sensor
 {
     public class VisionSensor : MonoBehaviour
     {
-        [SerializeField] private float _distance;
         [SerializeField] private float _angle;
         [SerializeField] private float _height;
         [SerializeField] private float _scanDelay;
@@ -19,28 +20,35 @@ namespace _Project.Code.Runtime.Unit.AI.Sensor
         [SerializeField] private LayerMask _obstacleLayer;
 
         [Header("Debug")] [SerializeField] private bool _showFov;
-        [ShowIf(nameof(_showFov))] [SerializeField] private Color _meshColor;
 
+        [ShowIf(nameof(_showFov))] [SerializeField]
+        private Color _meshColor;
+        
         private Collider[] _colliders = new Collider[Constants.DefaultCollectionCapacity];
         private HashSet<GameObject> _previouslySeenObjects = new();
         private List<GameObject> _visibleTargets = new();
+        private float _distance;
 
         private CancellationTokenSource _cts = new();
         private Mesh _mesh;
         private int _count;
 
-        public event System.Action TargetSighted;
-        public event System.Action TargetLost;
-        
+        public readonly ReactiveProperty<bool> TargetSighted = new ReactiveProperty<bool>();
         public IReadOnlyList<GameObject> VisibleTargets => _visibleTargets;
-        public bool CanSeePlayer => _visibleTargets.Any(target => target.layer == LayerMask.NameToLayer("Player") && IsInSight(target));
+
+        public bool CanSeePlayer =>
+            _visibleTargets.Any(target => target.layer == LayerMask.NameToLayer("Player") && IsInSight(target));
 
         private void OnValidate()
         {
             _mesh = CreateWedgeMesh();
         }
-
-        private void Start() => Scan().Forget();
+        
+        public void Initialize(float distance)
+        {
+            _distance = distance;
+            Scan().Forget();
+        }
 
         private async UniTask Scan()
         {
@@ -49,6 +57,7 @@ namespace _Project.Code.Runtime.Unit.AI.Sensor
                 _count = Physics.OverlapSphereNonAlloc(transform.position, _distance, _colliders, _targetLayer,
                     QueryTriggerInteraction.Collide);
 
+                _visibleTargets.Clear();
                 var currentlySeenObjects = new HashSet<GameObject>();
 
                 for (int i = 0; i < _count; i++)
@@ -60,7 +69,7 @@ namespace _Project.Code.Runtime.Unit.AI.Sensor
                         _visibleTargets.Add(obj);
                         if (!_previouslySeenObjects.Contains(obj))
                         {
-                            TargetSighted?.Invoke();
+                            TargetSighted.Value = true;
                         }
                     }
                 }
@@ -70,7 +79,7 @@ namespace _Project.Code.Runtime.Unit.AI.Sensor
                     if (!currentlySeenObjects.Contains(obj))
                     {
                         _visibleTargets.Remove(obj);
-                        TargetLost?.Invoke();
+                        TargetSighted.Value = false;
                     }
                 }
 
@@ -107,20 +116,20 @@ namespace _Project.Code.Runtime.Unit.AI.Sensor
 
         private void OnDrawGizmos()
         {
-            if(!_showFov)
+            if (!_showFov)
                 return;
-            
+
             if (_mesh)
             {
                 Gizmos.color = _meshColor;
                 Gizmos.DrawMesh(_mesh, transform.position, transform.rotation);
             }
 
-            for (int i = 0; i < _count; i++) 
+            for (int i = 0; i < _count; i++)
                 Gizmos.DrawSphere(_colliders[i].transform.position, .2f);
 
             Gizmos.color = Color.green;
-            foreach (var obj in _visibleTargets) 
+            foreach (var obj in _visibleTargets)
                 Gizmos.DrawSphere(obj.transform.position, .2f);
         }
 
@@ -134,7 +143,7 @@ namespace _Project.Code.Runtime.Unit.AI.Sensor
 
             Vector3[] vertices = new Vector3[numVertices];
             int[] triangles = new int[numVertices];
-
+            
             Vector3 bottomCenter = Vector3.zero;
             Vector3 bottomLeft = Quaternion.Euler(0, -_angle, 0) * Vector3.forward * _distance;
             Vector3 bottomRight = Quaternion.Euler(0, _angle, 0) * Vector3.forward * _distance;

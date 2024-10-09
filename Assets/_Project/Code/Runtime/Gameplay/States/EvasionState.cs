@@ -1,13 +1,17 @@
 using System;
-using System.Threading;
 using _Project.Code.Runtime.Config.Gameplay;
 using _Project.Code.Runtime.Config.Level;
 using _Project.Code.Runtime.Core.AssetManagement;
+using _Project.Code.Runtime.Core.Factory;
 using _Project.Code.Runtime.Core.States;
 using _Project.Code.Runtime.Services.Collection;
 using _Project.Code.Runtime.Services.Sound;
-using Cysharp.Threading.Tasks;
+using _Project.Code.Runtime.Services.Time;
+using _Project.Code.Runtime.UI.Label;
+using _Project.Code.Runtime.UI.Parent;
+using _Project.Code.Runtime.UI.View.State;
 using UnityEngine;
+using UniRx;
 
 namespace _Project.Code.Runtime.States
 {
@@ -17,46 +21,76 @@ namespace _Project.Code.Runtime.States
         private readonly BattleStateMachine _fsm;
         private readonly MusicService _musicService;
         private readonly EnemyCollection _enemyCollection;
-        private readonly float _stateDuration;
 
-        private CancellationTokenSource _cts;
+        private readonly Timer _timer;
+        private readonly TimeLabel _timeLabel;
+        private readonly StateView _stateView;
 
-        public EvasionState(BattleStateMachine fsm, MusicService musicService, ConfigProvider configProvider,
-            EnemyCollection enemyCollection)
+        private IDisposable _playerSighted;
+        private IDisposable _ticked;
+        private IDisposable _finished;
+
+        public EvasionState(BattleStateMachine fsm
+            , MusicService musicService
+            , ConfigProvider configProvider
+            , EnemyCollection enemyCollection
+            , UIFactory uiFactory
+            , RadarParent radarParent
+            , TimeLabel timeLabel)
         {
             _fsm = fsm;
             _musicService = musicService;
             _enemyCollection = enemyCollection;
+            _timeLabel = timeLabel;
 
             var levelConfig = configProvider.GetSingle<LevelConfig>();
             _musicConfig = levelConfig.Music;
-            _stateDuration = levelConfig.AlertStateDuration;
+
+            _stateView = uiFactory.CreateView(radarParent.transform, InitialState.Evasion);
+
+            _timer = new Timer(TimeSpan.FromSeconds(levelConfig.AlertStateDuration));
+            _stateView.Hide();
         }
 
         public void Enter()
         {
-            _enemyCollection.PlayerSighted += StopCountdown;
+            _playerSighted = _enemyCollection.PlayerSighted.Subscribe(sighted =>
+            {
+                if (sighted) StopCountdown();
+            });
+            
+            _ticked = _timer.ElapsedTime.Subscribe(_timeLabel.SetValue);
+            _finished = _timer.ElapsedTime
+                .Where(time => time <= TimeSpan.Zero)
+                .Subscribe(_ => EnterStealthState());
+            
+            _stateView.Show();
+            _enemyCollection.SetSearch();
             _musicService.PlayImmediately(_musicConfig.EvasionLoopClip);
-            StartCountdown().Forget();
+
+            StartCountdown();
         }
 
         public void Exit()
         {
-            _enemyCollection.PlayerSighted -= StopCountdown;
-            _cts.Cancel();            
+            _stateView.Hide();
             _musicService.Stop();
+            _timer.Stop();
+            _playerSighted.Dispose();
+            _finished.Dispose();
+            _ticked.Dispose();
         }
 
         private void StopCountdown()
         {
-            _cts?.Cancel();
             _fsm.Enter<AlertState>();
         }
 
-        private async UniTask StartCountdown()
+        private void StartCountdown() => _timer.Start();
+
+        private void EnterStealthState()
         {
-            _cts = new CancellationTokenSource();
-            await UniTask.Delay(TimeSpan.FromSeconds(_stateDuration), cancellationToken: _cts.Token);
+            Debug.Log("Evasion countdown finished, entering StealthState.");
             _fsm.Enter<StealthState>();
         }
     }

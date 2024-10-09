@@ -8,8 +8,8 @@ using _Project.Code.Runtime.Services.Collection;
 using _Project.Code.Runtime.Services.Sound;
 using _Project.Code.Runtime.UI.Parent;
 using _Project.Code.Runtime.Unit.Player;
-using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine;
 using Zenject;
 
 namespace _Project.Code.Runtime.Core.Installer
@@ -18,7 +18,10 @@ namespace _Project.Code.Runtime.Core.Installer
     {
         [SerializeField] private AudioSource _musicSource;
         [SerializeField] private Camera _camera;
+        [Space(20)]
         [FormerlySerializedAs("_bossBarParent")] [SerializeField] private BossUiParent _bossUiParent;
+        [SerializeField] private RadarParent _radarParent;
+        [Space(20)]
         [SerializeField] private PlayerFacade _playerFacade;
         [SerializeField] private List<EnemySpawnPoint> _spawnPoints;
         
@@ -31,6 +34,7 @@ namespace _Project.Code.Runtime.Core.Installer
             Container.BindInstance(_playerFacade);
             Container.BindInstance(_musicSource);
             Container.BindInstance(_bossUiParent);
+            Container.BindInstance(_radarParent);
             
             Container.Bind<EnemyCollection>().AsSingle();
             Container.Bind<CameraService>().AsSingle().WithArguments(_camera);

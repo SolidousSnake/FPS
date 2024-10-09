@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: Sed
   m_EditorClassIdentifier: 
   <MaxAttackDistance>k__BackingField: 6
+  <MaxVisionDistance>k__BackingField: 10
   <UpdateStateDelay>k__BackingField: 0.09

@@ -1,8 +1,6 @@
-using System;
-using _Project.Code.Runtime.Services.Time;
 using TMPro;
+using System;
 using UnityEngine;
-using Zenject;
 
 namespace _Project.Code.Runtime.UI.Label
 {
@@ -11,11 +9,7 @@ namespace _Project.Code.Runtime.UI.Label
         [SerializeField] private TextMeshProUGUI _label;
         [SerializeField] private string _format = "m\\:ss";
 
-        [Inject] private Stopwatch _stopwatch;
-
-        public void OnEnable() => _stopwatch.Ticked += SetValue;
-        public void OnDisable() => _stopwatch.Ticked -= SetValue;
-        
-        private void SetValue(TimeSpan value) => _label.text = value.ToString(@_format);
+        public void Initialize() => _label.transform.SetAsLastSibling();
+        public void SetValue(TimeSpan value) => _label.text = value.ToString(_format);
     }
 }

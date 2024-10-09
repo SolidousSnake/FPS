@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using _Project.Code.Runtime.AI.Sensor;
 using _Project.Code.Runtime.AI.States;
 using _Project.Code.Runtime.Config.AI.Quotes;
 using _Project.Code.Runtime.Config.AI.Stats;
@@ -11,7 +12,6 @@ using _Project.Code.Runtime.DamageCalculator;
 using _Project.Code.Runtime.Point.Waypoint;
 using _Project.Code.Runtime.Services.Collection;
 using _Project.Code.Runtime.UI.Parent;
-using _Project.Code.Runtime.Unit.AI.Sensor;
 using _Project.Code.Runtime.Unit.Movement;
 using _Project.Code.Runtime.Unit.Player;
 using _Project.Code.Runtime.Unit.Speaker;
@@ -21,6 +21,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Animations.Rigging;
 using Zenject;
+using UniRx;
 
 namespace _Project.Code.Runtime.Unit.Enemy.Install
 {
@@ -65,11 +66,7 @@ namespace _Project.Code.Runtime.Unit.Enemy.Install
         private AiStatsConfig _aiStatsConfig;
         public StateMachine Fsm { get; private set; }
         public bool CanSeePlayer => _visionSensor.CanSeePlayer;
-
-        public string State;
-
-        private void Update() => State = Fsm.ActiveState.GetType().Name;
-
+        
         public void Construct(List<Waypoint> waypoints, MovementMode movementMode)
         {
             _waypoints = waypoints;
@@ -83,15 +80,28 @@ namespace _Project.Code.Runtime.Unit.Enemy.Install
             _speaker = new EnemySpeaker(_speechSource
                 , _configProvider.GetSingleImmediately<QuotesConfig>(AssetPath.ConfigPath.AiQuotes + _name));
 
+            _aiStatsConfig = _configProvider.GetSingleImmediately<AiStatsConfig>(AssetPath.ConfigPath.AiStats + _name);
+
             InstallStates();
             InstallDamageCalculator();
             InitializeUI();
 
+            _visionSensor.Initialize(_aiStatsConfig.MaxVisionDistance);
+            
             foreach (var hitBox in _hitBoxes)
                 hitBox.Initialize(_calculator);
 
             _enemyCollection.Register(this);
-            _health.Depleted += Fsm.Enter<DeathState>;
+
+            _visionSensor.TargetSighted.Subscribe(sighted =>
+            {
+                if (sighted)
+                    _enemyCollection.ReportPlayerSighted();
+                else
+                    _enemyCollection.ReportPlayerLost();
+            }).AddTo(this);
+            
+           _health.Depleted += Fsm.Enter<DeathState>;
         }
 
         private void OnDestroy()
@@ -117,18 +127,15 @@ namespace _Project.Code.Runtime.Unit.Enemy.Install
             var navMeshMovement = new NavMeshMovement(_navMeshAgent);
             var waypointMovement = new WaypointMovement(_waypoints, _movementMode);
 
-            _aiStatsConfig = _configProvider.GetSingleImmediately<AiStatsConfig>(AssetPath.ConfigPath.AiStats + _name);
-
-            Fsm.RegisterState(new AttackState(_aiStatsConfig, Fsm, _visionSensor, _speaker, _aimLayer, _player));
-            Fsm.RegisterState(new ChaseTargetState(_enemyCollection, _aiStatsConfig, Fsm, _visionSensor, _speaker, navMeshMovement,
-                _player));
-            Fsm.RegisterState(new SearchState(_enemyCollection, _aiStatsConfig, Fsm, _visionSensor, _speaker, navMeshMovement, _player));
-            Fsm.RegisterState(new DeathState(_enemyCollection, this, _speaker, _aimLayer));
+            Fsm.RegisterState(new AttackState(_aiStatsConfig, Fsm, _visionSensor, _speaker, _aimLayer, this, _player));
+            Fsm.RegisterState(new ChaseTargetState(_aiStatsConfig, Fsm, _speaker, navMeshMovement, this, _player));
+            Fsm.RegisterState(new SearchState(_aiStatsConfig, _speaker, navMeshMovement, _player));
+            Fsm.RegisterState(new DeathState(_enemyCollection, this, _speaker, _aimLayer, navMeshMovement));
 
             if (_movementMode == MovementMode.None)
-                Fsm.RegisterState(new SentryState(_enemyCollection, Fsm, _visionSensor, _aimLayer));
+                Fsm.RegisterState(new SentryState(_aimLayer));
             else
-                Fsm.RegisterState(new PatrolState(Fsm, _visionSensor, _aimLayer, waypointMovement, navMeshMovement));
+                Fsm.RegisterState(new PatrolState(_aimLayer, waypointMovement, navMeshMovement));
 
             Fsm.EnterDefaultState();
         }

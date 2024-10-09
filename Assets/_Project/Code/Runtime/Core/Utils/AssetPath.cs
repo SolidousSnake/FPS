@@ -19,6 +19,10 @@ namespace _Project.Code.Runtime.Core.Utils
             public const string BossLabel = MainFolder + "BossNameLabel";
             public const string HealthBar = MainFolder + "SedHealthBar";
             public const string ArmorBar = MainFolder + "SedArmorBar";
+
+            public const string TimeLabel = MainFolder + "TimeLabel";
+            public const string AlertView = MainFolder + "AlertView";
+            public const string EvasionView = MainFolder + "EvasionView";
         }
     }
 }
